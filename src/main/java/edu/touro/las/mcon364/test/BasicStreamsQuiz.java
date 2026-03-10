@@ -1,6 +1,7 @@
 package edu.touro.las.mcon364.test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BasicStreamsQuiz {
 
@@ -19,15 +20,25 @@ public class BasicStreamsQuiz {
      * Return all course names sorted alphabetically.
      */
     public List<String> getSortedCourseNames() {
-        throw new UnsupportedOperationException();
+        // sorted() - natural order (must see all elements)
+        return getSortedCourseNames().stream()
+                .sorted()
+                .toList();
+
     }
+
 
     /**
      * Problem 7
      * Across all courses, count how many scores are greater than or equal to threshold.
      */
     public long countScoresAtLeast(int threshold) {
-        throw new UnsupportedOperationException();
+
+        return scoresByCourse.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().stream()
+                        .count() >= threshold).count();
+
     }
 
     /**
@@ -36,8 +47,12 @@ public class BasicStreamsQuiz {
      * If none exists, return Optional.empty().
      */
     public Optional<String> firstLongWord(List<String> words, int minLength) {
-        throw new UnsupportedOperationException();
+        boolean longer = words.stream()
+                .anyMatch(n -> n.length() > minLength);
+        return longer ? Optional.of(words.get(words.size() - 1)) : Optional.empty();
     }
+
+
 
     /**
      * Problem 9
@@ -45,7 +60,10 @@ public class BasicStreamsQuiz {
      * Use streams.
      */
     public List<Integer> squareAll(List<Integer> numbers) {
-        throw new UnsupportedOperationException();
+        return numbers.stream()
+                .filter(n ->  n * n)
+                .collect(Collectors.toList());
+
     }
 
     /**
@@ -56,6 +74,11 @@ public class BasicStreamsQuiz {
      * Return 0.0 if there are no passing scores.
      */
     public double averagePassingScore() {
-        throw new UnsupportedOperationException();
-    }
+
+  return scoresByCourse.entrySet().stream()
+          .filter(av -> av >= 70 )
+          .flatMap(r -> score().stream())
+                .average()
+                .orElse(0.0);  }
+
 }
